@@ -347,7 +347,7 @@ check_wallet_balance() {
     else
       echo -e "${RED}⚙️  ethers is not installed${RESET}"
         echo -e "${GREEN}🛠️  Installing ethers...${RESET}"
-      npm install -g ethers
+      npm install ethers
       if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ ethers successfully installed${RESET}"
       else
@@ -364,7 +364,7 @@ check_wallet_balance() {
     else
       echo -e "${RED}⚙️  dotenv is not installed${RESET}"
         echo -e "${GREEN}🛠️  Installing dotenv...${RESET}"
-      npm install -g dotenv
+      npm install dotenv
       if [ $? -eq 0 ]; then
         echo -e "${GREEN}✅ dotenv successfully installed${RESET}"
       else
