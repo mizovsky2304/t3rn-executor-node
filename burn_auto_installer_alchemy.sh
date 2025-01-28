@@ -279,7 +279,7 @@ install_node() {
     RPC_ENDPOINTS_L1RN="https://brn.calderarpc.com/http,https://brn.rpc.caldera.xyz/"
 
 
-    export RPC_ENDPOINTS_ARB
+    export RPC_ENDPOINTS_ARBT
     export RPC_ENDPOINTS_BSSP
     export RPC_ENDPOINTS_BLSS
     export RPC_ENDPOINTS_OPSP
