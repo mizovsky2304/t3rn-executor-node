@@ -252,16 +252,17 @@ export EXECUTOR_MAX_L3_GAS_PRICE=200
 export EXECUTOR_PROCESS_PENDING_ORDERS_FROM_API=false
 
 export PRIVATE_KEY_LOCAL=$PRIVATE_KEY_LOCAL
-export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,optimism-sepolia,unichain-sepolia,l2rn'
+export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,optimism-sepolia,unichain-sepolia,blast-sepolia,l2rn'
    
 
         
-    export RPC_ENDPOINTS='{
+export RPC_ENDPOINTS='{
     "l2rn": ["https://b2n.rpc.caldera.xyz/http"],
     "arbt": ["https://arbitrum-sepolia.drpc.org", "https://sepolia-rollup.arbitrum.io/rpc"],
     "bast": ["https://base-sepolia-rpc.publicnode.com", "https://base-sepolia.drpc.org"],
     "opst": ["https://sepolia.optimism.io", "https://optimism-sepolia.drpc.org"],
-    "unit": ["https://unichain-sepolia.drpc.org", "https://sepolia.unichain.org"]
+    "unit": ["https://unichain-sepolia.drpc.org", "https://sepolia.unichain.org"],
+    "blst": ["https://sepolia.blast.io", "https://endpoints.omniatech.io/v1/blast/sepolia/public"]
 }'
 
     
