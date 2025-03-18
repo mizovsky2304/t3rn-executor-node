@@ -249,10 +249,10 @@ export EXECUTOR_PROCESS_BIDS_ENABLED=true
 export EXECUTOR_PROCESS_ORDERS_ENABLED=true
 export EXECUTOR_PROCESS_CLAIMS_ENABLED=true
 export EXECUTOR_MAX_L3_GAS_PRICE=2000
+export EXECUTOR_PROCESS_PENDING_ORDERS_FROM_API=false
 
-
-    export PRIVATE_KEY_LOCAL=$PRIVATE_KEY_LOCAL
-    export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,optimism-sepolia,unichain-sepolia,l2rn'
+export PRIVATE_KEY_LOCAL=$PRIVATE_KEY_LOCAL
+export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,optimism-sepolia,unichain-sepolia,l2rn'
    
 
         
@@ -267,46 +267,17 @@ export EXECUTOR_MAX_L3_GAS_PRICE=2000
     
      
 
-    echo -ne "${RED}🔒  Enter your Alchemy API key:${RESET} "
-    read   ALCHEMY_API_KEY
-    echo -e "\n${GREEN}✅ Alchemy API key has been set.${RESET}"
-    echo 
+    
 
 
     
 
-    #Alchemy API key for RPC node :
-    
-    RPC_ENDPOINTS_ARBT="https://arb-sepolia.g.alchemy.com/v2/$ALCHEMY_API_KEY,https://arbitrum-sepolia.drpc.org,https://sepolia-rollup.arbitrum.io/rpc"
-
-
-    RPC_ENDPOINTS_BSSP="https://base-sepolia.g.alchemy.com/v2/$ALCHEMY_API_KEY,https://base-sepolia-rpc.publicnode.com, https://base-sepolia.drpc.org"
     
 
-    RPC_ENDPOINTS_UNIT="https://unichain-sepolia.g.alchemy.com/v2/$ALCHEMY_API_KEY,https://unichain-sepolia.drpc.org,https://sepolia.unichain.org"    
 
     
-    RPC_ENDPOINTS_OPSP="https://opt-sepolia.g.alchemy.com/v2/$ALCHEMY_API_KEY,https://sepolia.optimism.io,https://optimism-sepolia.drpc.org"
-
-    RPC_ENDPOINTS_L2RN="https://b2n.rpc.caldera.xyz/http"
-
-
-    export RPC_ENDPOINTS_ARBT
-    export RPC_ENDPOINTS_UNIT
-    export RPC_ENDPOINTS_BSSP
-    export RPC_ENDPOINTS_OPSP
-    export RPC_ENDPOINTS_L2RN
 
     
-    
-   
-
-    export EXECUTOR_PROCESS_PENDING_ORDERS_FROM_API=false
-    export EXECUTOR_PROCESS_ORDERS_API_ENABLED=false
-
-
-
-
     # Start the executor process with pm2
     pm2 start ./executor/executor/bin/executor --name $NODE_PM2_NAME --log "$LOGFILE" --env NODE_ENV=$NODE_ENV --env LOG_LEVEL=$LOG_LEVEL --env LOG_PRETTY=$LOG_PRETTY --env ENABLED_NETWORKS=$ENABLED_NETWORKS --env PRIVATE_KEY_LOCAL="$PRIVATE_KEY_LOCAL";
 
