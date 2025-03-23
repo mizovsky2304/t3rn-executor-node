@@ -20,11 +20,9 @@ ICON_VIEW="👀"
 ICON_DOLLAR="💳"
 ICON_UPDATE="⛽️"
 
-
-
 # Global variables
-PROJCET_NAME="t3rn"
-#VERSION=$(curl -s https://api.github.com/repos/t3rn/executor-release/releases/latest | grep 'tag_name' | cut -d\" -f4 | grep -oP '(?<=v0\.)\d+')
+PROJECT_NAME="t3rn"
+VERSION=$(curl -s https://api.github.com/repos/t3rn/executor-release/releases/latest | grep 'tag_name' | cut -d\" -f4 | grep -oP '(?<=v0\.)\d+')
 
 T3RN_DIR="$HOME/t3rn"
 ENV_FILE="$T3RN_DIR/.env"
@@ -42,7 +40,7 @@ draw_bottom_border() {
     echo -e "${CYAN}╚══════════════════════════════════════════════════════════════════════════╝${RESET}"
 }
 print_telegram_icon() {
-    echo -e "          ${MAGENTA}${ICON_DISCORD} Join us on Disord!${RESET}"
+    echo -e "          ${MAGENTA}${ICON_DISCORD} Join us on Discord!${RESET}"
 }
 display_ascii() {
     echo -e "${RED}    ____                  _          ____      _            _  _         ${RESET}"    
@@ -53,10 +51,6 @@ display_ascii() {
     echo -e "${RED}              |___/|_|                                      |__/        ${RESET}"       
 }
 
-
-
-
-
 # Display main menu
 show_menu() {
     clear
@@ -64,9 +58,9 @@ show_menu() {
     display_ascii
     draw_middle_border
     print_telegram_icon
-    echo -e "    ${BLUE}Join us on Disord: ${YELLOW}https://discord.gg/uJEeSe9E${RESET}"
+    echo -e "    ${BLUE}Join us on Discord: ${YELLOW}https://discord.gg/uJEeSe9E${RESET}"
     draw_middle_border
-    echo -e "                ${GREEN}Node Manager for ${PROJCET_NAME}${RESET}"
+    echo -e "                ${GREEN}Node Manager for ${PROJECT_NAME}${RESET}"
     echo -e "    ${YELLOW}Please choose an option:${RESET}"
     echo -e "    ${CYAN}1.${RESET} ${ICON_INSTALL}  Install Node"
     echo -e "    ${CYAN}2.${RESET} ${ICON_LOGS} View Logs"
@@ -74,27 +68,25 @@ show_menu() {
     echo -e "    ${CYAN}4.${RESET} ${ICON_STOP}  Stop Node"
     echo -e "    ${CYAN}5.${RESET} ${ICON_REMOVE}   Remove Node"
     echo -e "    ${CYAN}6.${RESET} ${ICON_START}  Start Node"
-       
-    
+    echo -e "    ${CYAN}7.${RESET} ${ICON_DOLLAR} Check Wallet Balance"
     echo -e "    ${CYAN}0.${RESET} ${ICON_EXIT} Exit"
     draw_bottom_border
-    echo -ne "${YELLOW}Enter a command number [0-6]:${RESET} "
+    echo -ne "${YELLOW}Enter a command number [0-7]:${RESET} "
     read choice
 }
-
 
 # Install node function with registration link and check
 install_node() {
     echo 
-    echo -e "${CYAN}To proceed, ensure you have at least ${RED}0.1 B2N ${CYAN}in your wallet.${RESET}"
-    echo -e "${CYAN}Claim free BRN from the faucet here: https://b2n.hub.caldera.xyz/${RESET}"
+    echo -e "${CYAN}To proceed, ensure you have at least ${RED}0.1 BRN ${CYAN}in your wallet.${RESET}"
+    echo -e "${CYAN}Claim free BRN from the faucet here: https://faucet.brn.t3rn.io/${RESET}"
     
     echo 
     echo -ne "${YELLOW}Do you have sufficient BRN balance in your wallet? (y/n): ${RESET}"
     read registered
 
     if [[ "$registered" != "y" && "$registered" != "Y" ]]; then
-        echo -e "${RED}You need at least 0.1 B2N to continue. Please claim some from the faucet.${RESET}"
+        echo -e "${RED}You need at least 0.1 BRN to continue. Please claim some from the faucet.${RESET}"
         read -p "Press Enter to return to the menu..."
         return
     fi
@@ -113,8 +105,8 @@ install_node() {
         echo -e "${CYAN}🗂️  Folder $T3RN_DIR created.${RESET}"
     else
         echo -e "${RED}🗂️  Folder $T3RN_DIR already exist.${RESET}"
-        rm -fr $T3RN_DIR/*
-        
+        rm -fr $T3RN_DIR/executor
+        rm -fr $T3RN_DIR/executor-linux-v0.$VERSION.0.tar.gz
     fi
     echo 
 
@@ -182,14 +174,12 @@ install_node() {
 
     
     
-    echo -e "${CYAN}⬇️   Downloading executor archive file${RESET}"
-    curl -s https://api.github.com/repos/t3rn/executor-release/releases/latest | \
-grep -Po '"tag_name": "\K.*?(?=")' | \
-xargs -I {} wget https://github.com/t3rn/executor-release/releases/download/{}/executor-linux-{}.tar.gz
+    echo -e "${CYAN}⬇️   Downloading executor-linux-v0.$VERSION.0.tar.gz${RESET}"
+    curl -L -O https://github.com/t3rn/executor-release/releases/download/v0.$VERSION.0/executor-linux-v0.$VERSION.0.tar.gz;
     echo
 
     echo -e "${YELLOW}🧰 Extracting the file...${RESET}";
-    tar -xzf executor-linux-*.tar.gz
+    tar -xvzf executor-linux-v0.$VERSION.0.tar.gz;
     echo
 
     # Check if extraction was successful
@@ -242,152 +232,29 @@ xargs -I {} wget https://github.com/t3rn/executor-release/releases/download/{}/e
     echo
 
 
-export ENVIRONMENT=testnet
-export LOG_LEVEL=debug
-export LOG_PRETTY=false
-export EXECUTOR_PROCESS_BIDS_ENABLED=true
-export EXECUTOR_PROCESS_ORDERS_ENABLED=true
-export EXECUTOR_PROCESS_CLAIMS_ENABLED=true
-export EXECUTOR_MAX_L3_GAS_PRICE=200
-export EXECUTOR_PROCESS_PENDING_ORDERS_FROM_API=false
-
-export PRIVATE_KEY_LOCAL=$PRIVATE_KEY_LOCAL
-export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,optimism-sepolia,unichain-sepolia,blast-sepolia,l2rn'
+    export NODE_ENV=testnet
+    export LOG_LEVEL=debug
+    export LOG_PRETTY=false
+    
+    export EXECUTOR_PROCESS_ORDERS=true
+    export EXECUTOR_PROCESS_CLAIMS=true
+    export EXECUTOR_PROCESS_BIDS_ENABLED=true
+    export EXECUTOR_MAX_L3_GAS_PRICE=20000
+    export PRIVATE_KEY_LOCAL=$PRIVATE_KEY_LOCAL
+    export ENABLED_NETWORKS='arbitrum-sepolia,base-sepolia,blast-sepolia,optimism-sepolia,l1rn'
    
 
-        
-export RPC_ENDPOINTS='{
-    "l2rn": ["https://b2n.rpc.caldera.xyz/http"],
-    "arbt": ["https://arbitrum-sepolia.drpc.org", "https://sepolia-rollup.arbitrum.io/rpc"],
-    "bast": ["https://base-sepolia-rpc.publicnode.com", "https://base-sepolia.drpc.org"],
-    "opst": ["https://sepolia.optimism.io", "https://optimism-sepolia.drpc.org"],
-    "unit": ["https://unichain-sepolia.drpc.org", "https://sepolia.unichain.org"],
-    "blst": ["https://sepolia.blast.io", "https://endpoints.omniatech.io/v1/blast/sepolia/public"]
-}'
+    # Default RPC endpoints
+    DEFAULT_RPC_ENDPOINTS_ARBT="https://arbitrum-sepolia-rpc.publicnode.com"
+    DEFAULT_RPC_ENDPOINTS_BSSP="https://sepolia.base.org"
+    DEFAULT_RPC_ENDPOINTS_BLSS="https://sepolia.blast.io"
+    DEFAULT_RPC_ENDPOINTS_OPSP="https://sepolia.optimism.io"
+    
 
     
      
 
-    
-
-
-    
-
-    
-
-
-    
-
-    
-    # Start the executor process with pm2
-    pm2 start ./executor/executor/bin/executor --name $NODE_PM2_NAME --log "$LOGFILE" --env NODE_ENV=$NODE_ENV --env LOG_LEVEL=$LOG_LEVEL --env LOG_PRETTY=$LOG_PRETTY --env ENABLED_NETWORKS=$ENABLED_NETWORKS --env PRIVATE_KEY_LOCAL="$PRIVATE_KEY_LOCAL";
-
-   
-
-    
-    echo -e "${GREEN}✅ Node installed successfully. Check the logs to confirm authentication.${RESET}"
-    read -p "Press Enter to return to the menu..."
-}
-
-
-# View logs function
-view_logs() {
-    echo -e "${GREEN}📄 Viewing logs...${RESET}"
-    #pm2 logs $NODE_PM2_NAME --lines 50 
-    tail -n 50 $LOGFILE
-    
-    echo
-    read -p "Press Enter to return to the menu..."
-}
-
-# Restart node function
-restart_node() {
-    echo -e "${GREEN}🔄 Restarting node...${RESET}"
-    pm2 restart $NODE_PM2_NAME
-    echo -e "${GREEN}✅ Node restarted.${RESET}"
-    read -p "Press Enter to return to the menu..."
-}
-
-# Stop node function
-stop_node() {
+    echo -ne "${RED}🔒  Enter your Alchemy API key:${RESET} "
+    read   ALCHEMY_API_KEY
+    echo -e "\n${GREEN}✅ Alchemy API key has been set.${RESET}"
     echo 
-    echo -e "${YELLOW}⏹️  Stopping node...${RESET}"
-    echo 
-    pm2 stop $NODE_PM2_NAME
-    echo -e "${GREEN}✅ Node stopped.${RESET}"
-    
-    echo
-    echo
-    echo
-    read -p "Press Enter to return to the menu..."
-}
-
-# Start node function
-start_node() {
-    echo -e "${GREEN}▶️ Starting node...${RESET}"
-    pm2 start $NODE_PM2_NAME
-    echo -e "${GREEN}✅ Node started.${RESET}"
-    read -p "Press Enter to return to the menu..."
-}
-
-# Remove node function
-remove_node() {
-    echo 
-    echo -e "${YELLOW}🗑️  Removing node...${RESET}"
-    echo
-    pm2 delete $NODE_PM2_NAME
-    echo
-    rm -fr "$T3RN_DIR/executor" "$T3RN_DIR/executor.log" "$T3RN_DIR/getBalance.js" "$T3RN_DIR/.env" $T3RN_DIR/*.tar.gz
-    
-    echo
-    echo -e "${GREEN}✅ Node removed.${RESET}"
-    
-    
-    
-    echo
-    echo
-    echo
-    read -p "Press Enter to return to the menu..."
-}
-
-
-
-
-
-
-
-
-
-
-# Main menu loop
-while true; do
-    show_menu
-    case $choice in
-        1)
-            install_node
-            ;;
-        2)
-            view_logs
-            ;;
-        3)
-            restart_node
-            ;;
-        4)
-            stop_node
-            ;;
-        5)
-            remove_node
-            ;;    
-        6)
-            start_node
-            ;;
-        0)
-            echo -e "${GREEN}❌ Exiting...${RESET}"
-            exit 0
-            ;;
-        *)
-            echo -e "${RED}❌ Invalid input. Please try again.${RESET}"
-            read -p "Press Enter to continue..."
-            ;;
-    esac
-done
